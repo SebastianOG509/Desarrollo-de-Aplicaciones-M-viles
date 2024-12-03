@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
+
+    <!-- Custom BoardView to replace the grid of buttons -->
+    <co.edu.unal.tictactoe.harding.BoardView
+        android:id="@+id/board_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="10dp" />
+
+    <!-- TextView to display game information -->
+    <TextView
+        android:id="@+id/information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="info"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp" />
+
+    <!-- Button for restarting the game -->
+    <Button
+        android:id="@+id/new_game_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nuevo Juego"
+        android:textSize="18sp"
+        android:visibility="gone" 
+        android:onClick="onNewGameClicked"/> <!-- Initially hidden, will be shown at the end of the game -->
+
+    <!-- Botón de menú -->
+    <Button
+        android:id="@+id/menu_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Menú"
+        android:textSize="18sp"
+        android:layout_gravity="bottom|center"
+        android:onClick="showDialogMenu"  /> <!-- Asocia el botón a un método en tu actividad -->
+</LinearLayout>
