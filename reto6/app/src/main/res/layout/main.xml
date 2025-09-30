@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:padding="16dp"
+    android:background="#f0f0f0">
+
+    <!-- Custom BoardView -->
+    <co.edu.unal.tictactoe.harding.BoardView
+        android:id="@+id/board_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="12dp"
+        android:background="#ffffff"
+        android:elevation="4dp" />
+
+    <!-- TextView de información -->
+    <TextView
+        android:id="@+id/information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vas primero"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:textSize="20sp"
+        android:textColor="#333333"
+        android:textStyle="bold"/>
+
+    <!-- Puntajes -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/human_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="18sp"
+            android:textColor="#3F51B5"
+            android:layout_marginEnd="24dp"/>
+
+        <TextView
+            android:id="@+id/computer_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="18sp"
+            android:textColor="#E91E63"
+            android:layout_marginEnd="24dp"/>
+
+        <TextView
+            android:id="@+id/tie_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="18sp"
+            android:textColor="#009688"/>
+    </LinearLayout>
+
+    <!-- Botón de menú -->
+    <Button
+        android:id="@+id/menu_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="Menú"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#3F51B5"
+        android:layout_marginTop="20dp"
+        android:elevation="4dp"
+        android:padding="10dp"/>
+</LinearLayout>
