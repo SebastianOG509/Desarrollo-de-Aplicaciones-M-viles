@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp"
+    android:background="#121212">
+
+    <TextView
+        android:id="@+id/tvTurn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Turno: X"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="20dp"/>
+
+    <GridLayout
+        android:id="@+id/grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="3"
+        android:columnCount="3"
+        android:background="#FFFFFF">
+
+        <!-- 9 botones del tablero -->
+        <Button android:id="@+id/btn0" style="@style/TriquiButton"/>
+        <Button android:id="@+id/btn1" style="@style/TriquiButton"/>
+        <Button android:id="@+id/btn2" style="@style/TriquiButton"/>
+        <Button android:id="@+id/btn3" style="@style/TriquiButton"/>
+        <Button android:id="@+id/btn4" style="@style/TriquiButton"/>
+        <Button android:id="@+id/btn5" style="@style/TriquiButton"/>
+        <Button android:id="@+id/btn6" style="@style/TriquiButton"/>
+        <Button android:id="@+id/btn7" style="@style/TriquiButton"/>
+        <Button android:id="@+id/btn8" style="@style/TriquiButton"/>
+    </GridLayout>
+
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reiniciar Juego"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>
