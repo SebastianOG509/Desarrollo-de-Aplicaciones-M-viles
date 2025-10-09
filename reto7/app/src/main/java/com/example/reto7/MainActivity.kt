@@ -32,23 +32,33 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameListScreen(db: DatabaseReference, onJoinGame: (String, Boolean) -> Unit) {
     var games by remember { mutableStateOf(listOf<String>()) }
+    var loading by remember { mutableStateOf(false) }
+    var errorMsg by remember { mutableStateOf<String?>(null) }
 
     // Leer juegos disponibles
-    LaunchedEffect(true) {
-        db.addValueEventListener(object : ValueEventListener {
+    LaunchedEffect(db) {
+        val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val list = mutableListOf<String>()
                 for (game in snapshot.children) {
                     val opponent = game.child("opponent").getValue(String::class.java)
-                    if (opponent.isNullOrEmpty()) list.add(game.key!!)
+                    if (opponent.isNullOrEmpty()) list.add(game.key ?: continue)
                 }
                 games = list
             }
-            override fun onCancelled(error: DatabaseError) {}
-        })
+
+            override fun onCancelled(error: DatabaseError) {
+                errorMsg = "Error al leer partidas: ${error.message}"
+            }
+        }
+        db.addValueEventListener(listener)
+
+        // Remove listener when composable leaves composition
+        onDispose { db.removeEventListener(listener) }
     }
 
     Scaffold(
@@ -62,37 +72,70 @@ fun GameListScreen(db: DatabaseReference, onJoinGame: (String, Boolean) -> Unit)
                 .padding(16.dp)
                 .fillMaxSize()
         ) {
-            Button(onClick = {
-                val newId = db.push().key!!
-                db.child(newId).setValue(
-                    mapOf(
-                        "creator" to "JugadorA",
-                        "opponent" to "",
-                        "board" to List(9) { "" },
-                        "turn" to "JugadorA",
-                        "winner" to ""
-                    )
-                )
-                onJoinGame(newId, true)
-            }) {
-                Text("Crear nueva partida")
+            if (errorMsg != null) {
+                Text(text = errorMsg!!, color = MaterialTheme.colorScheme.error)
+                Spacer(Modifier.height(8.dp))
+            }
+
+            Button(
+                onClick = {
+                    loading = true
+                    val newId = db.push().key
+                    if (newId != null) {
+                        val newGame = mapOf(
+                            "creator" to "JugadorA",
+                            "opponent" to "",
+                            "board" to ArrayList(List(9) { "" }),
+                            "turn" to "JugadorA",
+                            "winner" to ""
+                        )
+                        db.child(newId).setValue(newGame)
+                            .addOnSuccessListener {
+                                loading = false
+                                onJoinGame(newId, true)
+                            }
+                            .addOnFailureListener {
+                                loading = false
+                                errorMsg = "Error al crear partida: ${it.message}"
+                            }
+                    } else {
+                        loading = false
+                        errorMsg = "Error al generar ID de partida"
+                    }
+                },
+                enabled = !loading
+            ) {
+                Text(if (loading) "Creando..." else "Crear nueva partida")
             }
 
             Spacer(Modifier.height(20.dp))
 
             Text("Partidas disponibles:")
-            LazyColumn {
-                items(games) { id ->
-                    Text(
-                        text = "Partida $id",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                db.child(id).child("opponent").setValue("JugadorB")
-                                onJoinGame(id, false)
-                            }
-                            .padding(12.dp)
-                    )
+
+            if (games.isEmpty()) {
+                Text("No hay partidas disponibles", modifier = Modifier.padding(12.dp))
+            } else {
+                LazyColumn {
+                    items(games) { id ->
+                        Text(
+                            text = "Partida $id",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    loading = true
+                                    db.child(id).child("opponent").setValue("JugadorB")
+                                        .addOnSuccessListener {
+                                            loading = false
+                                            onJoinGame(id, false)
+                                        }
+                                        .addOnFailureListener {
+                                            loading = false
+                                            errorMsg = "Error al unirse: ${it.message}"
+                                        }
+                                }
+                                .padding(12.dp)
+                        )
+                    }
                 }
             }
         }
