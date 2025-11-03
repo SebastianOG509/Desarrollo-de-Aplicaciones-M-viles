@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 
 class MainActivity : ComponentActivity() {
@@ -19,8 +20,14 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 🔹 Inicializar Firebase ANTES de acceder a la base de datos
+        FirebaseApp.initializeApp(this)
+
+        // 🔹 Referencia al nodo "games" en Realtime Database
         db = FirebaseDatabase.getInstance().getReference("games")
 
+        // 🔹 Cargar la interfaz con Compose
         setContent {
             GameListScreen(db) { gameId, isCreator ->
                 val intent = Intent(this, GameActivity::class.java)
@@ -39,8 +46,8 @@ fun GameListScreen(db: DatabaseReference, onJoinGame: (String, Boolean) -> Unit)
     var loading by remember { mutableStateOf(false) }
     var errorMsg by remember { mutableStateOf<String?>(null) }
 
-    // Leer juegos disponibles
-    LaunchedEffect(db) {
+    // 🔹 Escuchar cambios en las partidas disponibles
+    DisposableEffect(db) {
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val list = mutableListOf<String>()
@@ -55,12 +62,15 @@ fun GameListScreen(db: DatabaseReference, onJoinGame: (String, Boolean) -> Unit)
                 errorMsg = "Error al leer partidas: ${error.message}"
             }
         }
+
         db.addValueEventListener(listener)
 
-        // Remove listener when composable leaves composition
-        onDispose { db.removeEventListener(listener) }
+        onDispose {
+            db.removeEventListener(listener)
+        }
     }
 
+    // 🔹 UI principal
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Triqui Online") })
@@ -77,6 +87,7 @@ fun GameListScreen(db: DatabaseReference, onJoinGame: (String, Boolean) -> Unit)
                 Spacer(Modifier.height(8.dp))
             }
 
+            // 🔹 Botón para crear nueva partida
             Button(
                 onClick = {
                     loading = true
@@ -85,10 +96,11 @@ fun GameListScreen(db: DatabaseReference, onJoinGame: (String, Boolean) -> Unit)
                         val newGame = mapOf(
                             "creator" to "JugadorA",
                             "opponent" to "",
-                            "board" to ArrayList(List(9) { "" }),
+                            "board" to List(9) { "" },
                             "turn" to "JugadorA",
                             "winner" to ""
                         )
+
                         db.child(newId).setValue(newGame)
                             .addOnSuccessListener {
                                 loading = false

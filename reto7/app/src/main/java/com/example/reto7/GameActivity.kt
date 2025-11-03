@@ -23,8 +23,9 @@ class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val gameId = intent.getStringExtra("gameId")!!
-        val isCreator = intent.getBooleanExtra("isCreator", true)
+        val currentIntent = intent
+        val gameId = currentIntent.getStringExtra("gameId") ?: return
+        val isCreator = currentIntent.getBooleanExtra("isCreator", true)
         val player = if (isCreator) "JugadorA" else "JugadorB"
 
         db = FirebaseDatabase.getInstance().getReference("games").child(gameId)
@@ -33,6 +34,7 @@ class GameActivity : ComponentActivity() {
             OnlineTriqui(db, player)
         }
     }
+
 }
 
 @Composable
