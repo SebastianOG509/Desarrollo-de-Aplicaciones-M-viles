@@ -1,4 +1,5 @@
 package com.example.reto12
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -10,7 +11,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        // Configuración de Google Sign-In
+        // Configuración Google Sign-In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -33,11 +33,18 @@ class MainActivity : AppCompatActivity() {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        val btnGoogle = findViewById<Button>(R.id.btnGoogle)
-        btnGoogle.setOnClickListener {
+        // Botón login
+        findViewById<Button>(R.id.btnGoogle).setOnClickListener {
             signInWithGoogle()
         }
+
+        // Botón logout
+        findViewById<Button>(R.id.btnLogout).setOnClickListener {
+            signOut()
+        }
     }
+
+    /*------------- LOGIN ----------------*/
 
     private fun signInWithGoogle() {
         val signInIntent = googleSignInClient.signInIntent
@@ -70,5 +77,17 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "Autenticación FALLIDA", Toast.LENGTH_LONG).show()
                 }
             }
+    }
+
+    /*------------- LOGOUT ----------------*/
+
+    private fun signOut() {
+        // Cerrar sesión en Firebase
+        auth.signOut()
+
+        // Cerrar sesión en Google
+        googleSignInClient.signOut().addOnCompleteListener {
+            Toast.makeText(this, "Sesión cerrada correctamente", Toast.LENGTH_LONG).show()
+        }
     }
 }
