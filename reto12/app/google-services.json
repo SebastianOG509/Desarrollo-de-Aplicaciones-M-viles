@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "155446235718",
+    "project_id": "reto12-ed6ad",
+    "storage_bucket": "reto12-ed6ad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155446235718:android:5973de7a4b7789260ab047",
+        "android_client_info": {
+          "package_name": "com.example.reto12"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "155446235718-30arnrspba8t03cnqsq1lcbbqjn56ip4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.reto12",
+            "certificate_hash": "358d0250034c8445dabcf08d09fa96f357284529"
+          }
+        },
+        {
+          "client_id": "155446235718-ak7q5a080fgrk5h6gcuvlq5pq21oje6d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkzMr8rawJIdgiY4nRoEHv369-fecjt7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "155446235718-ak7q5a080fgrk5h6gcuvlq5pq21oje6d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
